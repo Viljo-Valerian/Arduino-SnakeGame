@@ -260,6 +260,12 @@ void gameOver() {
   tft.println(highScore);
   tft.setCursor(0, 200);
   tft.println("Touch the screen or push a button to Restart");
+
+  if (score > highScore) {
+    highScore = score;
+    EEPROM.write(0,highScore);
+  }
+  
   pinMode(XM, INPUT);
   pinMode(YP, INPUT);
   while (isPressedOrClicked() == false) {}
@@ -283,11 +289,6 @@ void gameOver() {
   tft.setCursor(tft.width()/2, 150);
   tft.println("1");
   delay(200);
-
-  if (score > highScore) {
-    highScore = score;
-    EEPROM.write(0,highScore);
-  }
 
   delete snake;
   delete food;
