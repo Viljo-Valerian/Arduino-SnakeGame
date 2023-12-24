@@ -65,7 +65,6 @@ public:
       yPositions[0] += 20;
     }
   };
-  void changeDirection(int newDirection);
   bool checkCollision(){
     if (xPositions[0] < 0 || xPositions[0] >= tft.width() ||
         yPositions[0] < 0 || yPositions[0] >= tft.height()){
