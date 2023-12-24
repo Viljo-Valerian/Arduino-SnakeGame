@@ -152,6 +152,7 @@ void loop() {
     score++;
     food->removeFood();
     generateNewPosition();
+    food->drawFood();
   }
 
   // check if player lost
@@ -159,9 +160,8 @@ void loop() {
     gameOver();
   }
   
-  // Draw snake, food, and score banner (maybe not score because small screen)
+  // Draw snake and score banner (maybe not score because small screen)
   snake->drawSnake();
-  food->drawFood();
 
   buttonStateLeft = digitalRead(buttonLeft);
   buttonStateRight = digitalRead(buttonRight);
@@ -225,6 +225,8 @@ void initiateGame() {
   tft.println("Right");
   delay(2000);
   tft.fillScreen(tft.color565(86, 125, 70));
+  snake->drawSnake();
+  food->drawFood();
 }
 
 void generateNewPosition(){
