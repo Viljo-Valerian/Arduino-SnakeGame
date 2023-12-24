@@ -6,15 +6,15 @@
 #include <SPI.h>
 #include <Fonts/FreeMonoBoldOblique12pt7b.h>
 
-#define YP A3  // must be an analog pin
-#define XM A2  // must be an analog pin
-#define YM 9   // can be a digital pin
-#define XP 8   // can be a digital pin
+#define YP A3  // analog pin from calibration
+#define XM A2  // analog pin from calibration
+#define YM 9   // digital pin from calibration
+#define XP 8   // digital pin from calibration
 
-//==== Creating Objects
+// Creating Objects
 MCUFRIEND_kbv tft;
 TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
-TSPoint tp; // Global Touch
+TSPoint tp;
 const int buttonLeft = 31;
 const int buttonRight = 35;
 
@@ -34,8 +34,8 @@ const unsigned long debounceInterval = 240;
 class Snake {
 public:
   int length;               // Length of the snake
-  int xPositions[100];       // Array to store x-coordinates of snake segments
-  int yPositions[100];       // Array to store y-coordinates of snake segments
+  int xPositions[100];      // Array to store x-coordinates of snake segments
+  int yPositions[100];      // Array to store y-coordinates of snake segments
   int direction;            // Current direction of the snake (0 right,1 up,2 left,3 down)
 
 public:
@@ -116,7 +116,7 @@ public:
   }
 };
 
-// Define Snake and Food objects
+// Snake and Food pointers
 Snake* snake = nullptr;
 Food* food = nullptr;
 
@@ -124,13 +124,12 @@ void setup() {
   // Initiate display
   uint16_t ID = tft.readID();
   tft.begin(ID);
-  tft.setRotation(1); // Adjust to your screen orientation if needed
+  tft.setRotation(1);
   tft.fillScreen(TFT_BLACK);
   tft.setFont(&FreeMonoBoldOblique12pt7b);
   
-  // Initialize EEPROM
+  // Initialize EEPROM and load the high score from EEPROM
   EEPROM.begin();
-  // Load the high score from EEPROM
   highScore = EEPROM.read(0);
 
   // Set up touchscreen
@@ -188,7 +187,7 @@ void loop() {
       snake->direction = 2; //MOVE LEFT
     }
   }
-  //when this type of button is pressed, it becomes low...
+  // When this type of button is pressed, state is low...
   if(buttonStateLeft == LOW && millis() - lastButtonChangeTime > debounceInterval){
     lastButtonChangeTime = millis();
     snake->direction = (snake->direction + 1) % 4;
@@ -231,7 +230,7 @@ void initiateGame() {
 }
 
 void generateNewPosition(){
-  //get new random coordinates but if snake segment on new coors, get new one
+  // Get new random coordinates but if snake segment on new coors, get new one
   food->xPos = random(0, tft.width() / 20) * 20;
   food->yPos = random(0, tft.height() / 20) * 20;
 
@@ -263,7 +262,7 @@ void gameOver() {
   tft.println("Touch the screen or push a button to Restart");
   pinMode(XM, INPUT);
   pinMode(YP, INPUT);
-  while (ISPRESSED() == false) {}
+  while (isPressedOrClicked() == false) {}
   pinMode(XM, OUTPUT);
   pinMode(YP, OUTPUT);
   tft.fillScreen(TFT_BLACK);
@@ -297,13 +296,15 @@ void gameOver() {
   initiateGame();
 }
 
-bool ISPRESSED(void) {
+bool isPressedOrClicked(void) {
     int count = 0;
     bool state, oldstate;
     int buttonRestartLeft;
     int buttonRestartRight;
     while (count < 10) {
-        readResistiveTouch();
+        tp = ts.getPoint();
+        pinMode(YP, OUTPUT);
+        pinMode(XM, OUTPUT);
         state = tp.z > 200;
         buttonRestartLeft = digitalRead(buttonLeft);
         buttonRestartRight = digitalRead(buttonRight);
@@ -316,10 +317,4 @@ bool ISPRESSED(void) {
         delay(5);
     }
     return oldstate;
-}
-
-void readResistiveTouch(void) {
-    tp = ts.getPoint();
-    pinMode(YP, OUTPUT);
-    pinMode(XM, OUTPUT);
 }
