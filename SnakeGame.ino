@@ -192,11 +192,7 @@ void loop() {
   }
   if(buttonStateRight == LOW && millis() - lastButtonChangeTime > debounceInterval){
     lastButtonChangeTime = millis();
-    if(snake->direction == 0){
-      snake->direction = 3;
-    } else{
-      snake->direction = (snake->direction - 1) % 4;
-    }
+    snake->direction = (snake->direction + 3) % 4;
   }
 
   // Delay to control game speed
