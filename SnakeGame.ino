@@ -146,8 +146,6 @@ void loop() {
   // put your main code here, to run repeatedly:
   snake->removeSnake();
   snake->move();
-  buttonStateLeft = digitalRead(buttonLeft);
-  buttonStateRight = digitalRead(buttonRight);
 
   if (snake->xPositions[0] == food->xPos && snake->yPositions[0] == food->yPos) {
     snake->length++;
@@ -165,6 +163,8 @@ void loop() {
   snake->drawSnake();
   food->drawFood();
 
+  buttonStateLeft = digitalRead(buttonLeft);
+  buttonStateRight = digitalRead(buttonRight);
   pinMode(XM, INPUT);
   pinMode(YP, INPUT);
   pinMode(buttonLeft, INPUT);
