@@ -102,8 +102,6 @@ class Food {
 public:
   int xPos;  // x-coordinate of the food
   int yPos;  // y-coordinate of the food
-  int xSide = 20;
-  int ySide = 20;
 
 public:
   Food() {
