@@ -7,4 +7,5 @@ This project's objective is to create a game console with an Arduino circuit boa
 For those unfamiliar with the snake game, it involves controlling a small snake that can move in 90-degree increments. There is food scattered around the map, and the player has to control the snake to eat it to gain points. As the snake eats, it grows longer. The challenge is for us to survive and try to achieve the highest score possible in a single game session and not crash the snake into a wall or into its own body as the snake’s body gets larger from eating the food.
 
 The full code implementation is avilable to be viewed in `SnakeGame.ino`.
+
 Demo video is available! URL is in `demo_video_url.md`.
